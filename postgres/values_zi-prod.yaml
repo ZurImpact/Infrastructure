@@ -1,0 +1,3 @@
+postgres:
+  storage:
+    requestedSize: "15Gi"

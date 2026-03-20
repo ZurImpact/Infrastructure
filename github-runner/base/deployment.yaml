@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: github-runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: github-runner
+  template:
+    metadata:
+      labels:
+        app: github-runner
+    spec:
+      terminationGracePeriodSeconds: 90
+      containers:
+      - name: runner
+        image: myoung34/github-runner:2.332.0
+        env:
+        - name: ORG_NAME
+          value: "ZurImpact"
+        - name: RUNNER_SCOPE
+          value: "org"
+        - name: ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github-runner-secret
+              key: pat
+        - name: RUNNER_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: RUNNER_WORKDIR
+          value: "/tmp/runner/work"
+        - name: EPHEMERAL
+          value: "true"
+        - name: DISABLE_RUNNER_UPDATE
+          value: "true"
+        - name: GITHUB_HOST
+          value: github.zhaw.ch
+        securityContext:
+          privileged: true
+        volumeMounts:	
+          - mountPath: /var/run/docker.sock	
+            name: docker-socket
+        resources:
+          requests:
+            cpu: "1"
+            memory: "2Gi"
+          limits:
+            cpu: "4"
+            memory: "8Gi"
+      volumes:	
+        - hostPath:	
+            path: /var/run/docker.sock	
+            type: ''	
+          name: docker-socket

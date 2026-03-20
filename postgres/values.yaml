@@ -1,0 +1,16 @@
+postgres:
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  storage:
+    className: cinder-csi
+    requestedSize: "5Gi"
+    persistentVolumeClaimRetentionPolicy:
+      whenDeleted: Delete
+      whenScaled: Retain
+  settings:
+    existingSecret: postgres-admin-secret 
