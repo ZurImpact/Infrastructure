@@ -4,7 +4,7 @@ metadata:
   name: zurimpact-frontend
 spec:
   rules:
-  - host: .pm4.init-lab.ch # use kustomize here
+  - host: .pm4.init-lab.ch
     http:
       paths:
       - path: /

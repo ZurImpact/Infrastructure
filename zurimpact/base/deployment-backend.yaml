@@ -21,10 +21,10 @@ spec:
       - name: ghcr-pull-secret
       # securityContext:
       #   runAsNonRoot: false # fix this needs/should be true
-        # runAsUser: 1000
-        # fsGroup: 1000
-        # seccompProfile:
-        #   type: RuntimeDefault
+      #   runAsUser: 1000
+      #   fsGroup: 1000
+      #   seccompProfile:
+      #     type: RuntimeDefault
       containers:
       - name: zurimpact-backend
         image: ghcr.io/zurimpact/zurimpact-backend:dev-latest
