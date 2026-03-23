@@ -13,7 +13,7 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
-        entry: bash -c 'set -eo pipefail; for chart in $(find . -name "Chart.yaml" -exec dirname {} \; | sort -u); do echo "Validating $chart base..."; helm template "$chart" | kubeconform -summary -ignore-missing-schemas; for val in "$chart"/values_*.yaml; do [ -f "$val" ] && echo "Validating $chart with $val..." && helm template "$chart" -f "$val" | kubeconform -summary -ignore-missing-schemas; done; done'
+        entry: bash -c 'set -eo pipefail; for chart in $(find . -name "Chart.yaml" -exec dirname {} \; | sort -u); do echo "Building dependencies for $chart..." && helm dependency build "$chart" > /dev/null 2>&1; echo "Validating $chart base..." && helm template "$chart" | kubeconform -summary -ignore-missing-schemas; for val in "$chart"/values_*.yaml; do [ -f "$val" ] && echo "Validating $chart with $val..." && helm template "$chart" -f "$val" | kubeconform -summary -ignore-missing-schemas; done; done'
 
       - id: kubeconform-kustomize
         name: Kubeconform (Kustomize Rendered)
