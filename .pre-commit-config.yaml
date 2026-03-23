@@ -1,0 +1,63 @@
+repos:
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.38.0
+    hooks:
+      - id: yamllint
+        args:
+          - '-s'
+
+  - repo: local
+    hooks:
+      - id: kubeconform-helm
+        name: Kubeconform (Helm Rendered)
+        language: system
+        pass_filenames: false
+        always_run: true
+        entry: bash -c 'set -eo pipefail; for chart in $(find . -name "Chart.yaml" -exec dirname {} \; | sort -u); do echo "Validating $chart base..."; helm template "$chart" | kubeconform -summary -ignore-missing-schemas; for val in "$chart"/values_*.yaml; do [ -f "$val" ] && echo "Validating $chart with $val..." && helm template "$chart" -f "$val" | kubeconform -summary -ignore-missing-schemas; done; done'
+
+      - id: kubeconform-kustomize
+        name: Kubeconform (Kustomize Rendered)
+        language: system
+        pass_filenames: false
+        always_run: true
+        entry: bash -c 'set -eo pipefail; for kdir in $(find . -name "kustomization.yaml" -exec dirname {} \; | sort -u); do echo "Validating Kustomize $kdir..."; kustomize build "$kdir" | kubeconform -summary -ignore-missing-schemas; done'
+
+  - repo: local
+    hooks:
+      - id: helm-lint
+        name: helm-lint
+        language: system
+        entry: bash -c 'for chart in $(find . -name "Chart.yaml" -exec dirname {} \; | sort -u); do helm lint "$chart"; for val in "$chart"/values_*.yaml; do [ -f "$val" ] && helm lint "$chart" -f "$val"; done; done'
+        files: (Chart\.yaml|values.*\.yaml)$
+        pass_filenames: false
+
+  - repo: https://github.com/bridgecrewio/checkov.git
+    rev: '3.2.43'
+    hooks:
+      - id: checkov
+        name: Checkov (Helm)
+        pass_filenames: false
+        always_run: true
+        entry: bash -c 'for chart in $(find . -name "Chart.yaml" -exec dirname {} \; | sort -u); do checkov --config-file .checkov-helm.yaml -d "$chart" --framework helm --quiet; for val in "$chart"/values_*.yaml; do [ -f "$val" ] && checkov --config-file .checkov-helm.yaml -d "$chart" --framework helm --var-file "$val" --quiet; done; done'
+
+      - id: checkov
+        name: Checkov (Kustomize)
+        alias: checkov-kustomize
+        pass_filenames: false
+        always_run: true
+        entry: bash -c 'for kdir in $(find . -name "kustomization.yaml" -exec dirname {} \; | sort -u); do checkov --config-file .checkov-kustomize.yaml -d "$kdir" --framework kustomize --quiet; done'
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-merge-conflict
+      - id: check-json
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args:
+          - '--fix=lf'
+      - id: pretty-format-json
+        args:
+          - '--autofix'
+          - '--indent=2'
