@@ -43,13 +43,13 @@ if ($secretCheck) {
     $PG_PASSWORD = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($base64Pass))
 } else {
     Write-Host "Secret '$SECRET_NAME' not found. We need to create it."
-    
+
     $SecurePass1 = Read-Host "Enter the PostgreSQL superuser password you want to set" -AsSecureString
     $SecurePass2 = Read-Host "Confirm password" -AsSecureString
 
     $BSTR1 = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecurePass1)
     $PG_PASSWORD = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR1)
-    
+
     $BSTR2 = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecurePass2)
     $PG_PASSWORD_CONFIRM = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR2)
 

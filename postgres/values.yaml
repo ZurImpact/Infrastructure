@@ -1,4 +1,13 @@
 postgres:
+  image:
+    pullPolicy: Always
+  initResources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
   resources:
     limits:
       cpu: 100m
@@ -13,4 +22,10 @@ postgres:
       whenDeleted: Delete
       whenScaled: Retain
   settings:
-    existingSecret: postgres-admin-secret 
+    existingSecret: postgres-admin-secret
+  podSecurityContext:
+    fsGroup: 999
+    supplementalGroups:
+    - 999
+    seccompProfile:
+      type: RuntimeDefault
