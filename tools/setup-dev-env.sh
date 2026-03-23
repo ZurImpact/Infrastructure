@@ -42,7 +42,7 @@ if kubectl get secret "$SECRET_NAME" --namespace "$NAMESPACE" &> /dev/null; then
 else
     echo "Secret '$SECRET_NAME' not found. We need to create it."
     read -s -p "Enter the PostgreSQL superuser password you want to set: " PG_PASSWORD
-    echo "" 
+    echo ""
     read -s -p "Confirm password: " PG_PASSWORD_CONFIRM
     echo ""
 

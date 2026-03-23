@@ -1,0 +1,35 @@
+name: K8s Manifest Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  pre-commit:
+    name: Run Pre-Commit Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: 'latest'
+
+      - name: Install Kubeconform
+        run: |
+          wget https://github.com/yannh/kubeconform/releases/download/v0.6.4/kubeconform-linux-amd64.tar.gz
+          tar xf kubeconform-linux-amd64.tar.gz
+          sudo mv kubeconform /usr/local/bin/
+
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: --all-files

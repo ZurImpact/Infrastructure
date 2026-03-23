@@ -1,0 +1,6 @@
+skip-check:
+  - CKV_K8S_21    # The default namespace should not be used
+  - CKV_K8S_35    # Prefer using secrets as files over secrets as environment variables
+  - CKV_K8S_43    # Image should use digest
+  - CKV_K8S_40    # Containers should run as a high UID to avoid host conflict
+  - CKV_K8S_38    # "Ensure that Service Account Tokens are only mounted where necessary"
