@@ -1,0 +1,13 @@
+# deployment-patch.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zurimpact-backend
+spec:
+  template:
+    spec:
+      containers:
+      - name: zurimpact-backend
+        env:
+        - name: DB_URL
+          value: jdbc:postgresql://postgres-zi-staging:5432/zurimpact

@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: zi-prod
+nameSuffix: -prod
+
+resources:
+- ../../base
+
+images:
+- name: ghcr.io/zurimpact/zurimpact-backend
+  newTag: prod-latest
+- name: ghcr.io/zurimpact/zurimpact-frontend
+  newTag: prod-latest
+
+patches:
+- path: deployment-patch.yaml
+
+- target:
+    kind: Ingress
+    name: zurimpact-frontend
+  patch: |-
+    - op: replace
+      path: /spec/rules/0/host
+      value: zurimpact.pm4.init-lab.ch
