@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: zurimpact-frontend
   labels:
-    app:frontend
+    app: frontend
 spec:
   selector:
     matchLabels:
