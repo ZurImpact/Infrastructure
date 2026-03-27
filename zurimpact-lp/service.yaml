@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: zurimpact-lp-svc
+  namespace: zi-prod
+spec:
+  selector:
+    app: zurimpact-lp
+  type: ClusterIP
+  ports:
+  - name: zurimpact-lp
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
