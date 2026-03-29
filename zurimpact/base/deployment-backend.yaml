@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zurimpact-backend
+  labels:
+    app: backend
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  replicas: 1
+  revisionHistoryLimit: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
+      # securityContext:
+      #   runAsNonRoot: false # fix this needs/should be true
+      #   runAsUser: 1000
+      #   fsGroup: 1000
+      #   seccompProfile:
+      #     type: RuntimeDefault
+      containers:
+      - name: zurimpact-backend
+        image: ghcr.io/zurimpact/zurimpact-backend:dev-latest
+        # securityContext:
+        #   allowPrivilegeEscalation: false
+        #   readOnlyRootFilesystem: true
+        #   capabilities:
+        #     drop:
+        #     - ALL
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1Gi
+          limits:
+            cpu: 2
+            memory: 4Gi
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+          periodSeconds: 10
+        env:
+        - name: DB_URL
+          value: jdbc:postgresql://localhost:5432/dev_db
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-admin-secret
+              key: POSTGRES_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-admin-secret
+              key: POSTGRES_PASSWORD
+        ports:
+        - containerPort: 8080
+          name: backend
