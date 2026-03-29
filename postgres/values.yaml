@@ -23,6 +23,10 @@ postgres:
       whenScaled: Retain
   settings:
     existingSecret: postgres-admin-secret
+    superuser:
+      secretKey: "POSTGRES_USER"
+    superuserPassword:
+      secretKey: "POSTGRES_PASSWORD"
   podSecurityContext:
     fsGroup: 999
     supplementalGroups:
