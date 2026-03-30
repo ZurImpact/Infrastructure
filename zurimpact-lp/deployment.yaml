@@ -24,7 +24,7 @@ spec:
         fsGroup: 101
       containers:
       - name: web
-        image: ghcr.io/zurimpact/zurimpact-lp:0.1.1
+        image: ghcr.io/zurimpact/zurimpact-lp:0.2.0
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
