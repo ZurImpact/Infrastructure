@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-nginx
+data:
+  default.conf.template: |
+    server {
+        listen 8080;
+        server_name _;
+
+        root /usr/share/nginx/html;
+        index index.html;
+
+        location /backend_war_exploded/api {
+            rewrite ^/backend_war_exploded(/api/.*)$ $1 break;
+            proxy_pass        ${BACKEND_URL};
+            proxy_set_header  Host              $http_host;
+            proxy_set_header  Origin            $http_origin;
+            proxy_set_header  X-Real-IP         $remote_addr;
+            proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+            proxy_set_header  X-Forwarded-Proto $scheme;
+        }
+
+        location / {
+            try_files $uri $uri/ /index.html;
+        }
+
+        # Never serve source maps or hidden files
+        location ~ /\. {
+            deny all;
+        }
+    }
