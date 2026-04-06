@@ -7,9 +7,9 @@ resources:
 
 images:
 - name: ghcr.io/zurimpact/zurimpact-backend
-  newTag: dev-f37f35d
+  newTag: dev-3062a2a
 - name: ghcr.io/zurimpact/zurimpact-frontend
-  newTag: dev-f37f35d
+  newTag: dev-3062a2a
 
 patches:
 - path: deployment-patch.yaml
