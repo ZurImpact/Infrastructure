@@ -33,3 +33,11 @@ postgres:
     - 999
     seccompProfile:
       type: RuntimeDefault
+  userDatabase:
+    existingSecret: postgres-user-secret
+    name:
+      secretKey: POSTGRES_DB
+    user:
+      secretKey: POSTGRES_USER
+    password:
+      secretKey: POSTGRES_PASSWORD
