@@ -17,23 +17,25 @@ spec:
       labels:
         app: backend
     spec:
+      automountServiceAccountToken: false
       imagePullSecrets:
       - name: ghcr-pull-secret
-      # securityContext:
-      #   runAsNonRoot: false # fix this needs/should be true
-      #   runAsUser: 1000
-      #   fsGroup: 1000
-      #   seccompProfile:
-      #     type: RuntimeDefault
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        fsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: zurimpact-backend
         image: ghcr.io/zurimpact/zurimpact-backend:dev-latest
-        # securityContext:
-        #   allowPrivilegeEscalation: false
-        #   readOnlyRootFilesystem: true
-        #   capabilities:
-        #     drop:
-        #     - ALL
+        imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL
         resources:
           requests:
             cpu: 100m
@@ -44,7 +46,15 @@ spec:
         livenessProbe:
           tcpSocket:
             port: 8080
-          initialDelaySeconds: 5
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+          periodSeconds: 10
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 15
           timeoutSeconds: 5
           successThreshold: 1
           failureThreshold: 3
