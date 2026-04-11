@@ -41,3 +41,12 @@ postgres:
       secretKey: POSTGRES_USER
     password:
       secretKey: POSTGRES_PASSWORD
+  networkPolicy:
+    ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            app: backend
+      ports:
+      - protocol: TCP
+        port: 5432
