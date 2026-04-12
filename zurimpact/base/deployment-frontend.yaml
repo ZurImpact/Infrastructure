@@ -17,26 +17,28 @@ spec:
       labels:
         app: frontend
     spec:
+      automountServiceAccountToken: false
       imagePullSecrets:
       - name: ghcr-pull-secret
-      # securityContext:
-      #   runAsNonRoot: false # fix this needs/should be true
-      #   runAsUser: 1000
-      #   fsGroup: 1000
-      #   seccompProfile:
-      #     type: RuntimeDefault
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        fsGroup: 101
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: zurimpact-frontend
         image: ghcr.io/zurimpact/zurimpact-frontend:dev-latest
+        imagePullPolicy: Always
         env:
         - name: BACKEND_URL
           value: http://backend-svc:8080
-        # securityContext:
-        #   allowPrivilegeEscalation: true
-        #   readOnlyRootFilesystem: false
-        #   capabilities:
-        #     drop:
-        #     - ALL
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
         resources:
           requests:
             cpu: 100m
@@ -45,7 +47,17 @@ spec:
             cpu: 100m
             memory: 100Mi
         livenessProbe:
-          tcpSocket:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
             port: 8080
           initialDelaySeconds: 5
           timeoutSeconds: 5
@@ -58,7 +70,23 @@ spec:
         volumeMounts:
         - name: nginx-config
           mountPath: /etc/nginx/templates
+        - name: nginx-conf-dir
+          mountPath: /etc/nginx/conf.d
+        - name: nginx-cache
+          mountPath: /var/cache/nginx
+        - name: nginx-run
+          mountPath: /var/run
+        - name: tmp-dir
+          mountPath: /tmp
       volumes:
       - name: nginx-config
         configMap:
           name: frontend-nginx
+      - name: nginx-conf-dir
+        emptyDir: {}
+      - name: nginx-cache
+        emptyDir: {}
+      - name: nginx-run
+        emptyDir: {}
+      - name: tmp-dir
+        emptyDir: {}

@@ -8,3 +8,6 @@ resources:
 - service-backend.yaml
 - service-frontend.yaml
 - configmap-frontend-nginx.yaml
+- networkpolicy-backend.yaml
+- networkpolicy-default-deny.yaml
+- networkpolicy-frontend.yaml
