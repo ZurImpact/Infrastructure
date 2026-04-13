@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: zurimpact-lp-netpol
+  namespace: zi-prod
+spec:
+  podSelector:
+    matchLabels:
+      app: zurimpact-lp
+  policyTypes:
+  - Ingress
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 8080
