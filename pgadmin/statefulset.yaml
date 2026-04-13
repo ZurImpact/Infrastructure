@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pgadmin
+  namespace: zi-staging
+spec:
+  serviceName: pgadmin-service
+  podManagementPolicy: Parallel
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: pgadmin
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 10
+      securityContext:
+        fsGroup: 5050
+      containers:
+      - name: pgadmin
+        image: dpage/pgadmin4:9.14
+        imagePullPolicy: Always
+        env:
+        - name: PGADMIN_DEFAULT_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: pgadmin-secret
+              key: pgadmin-default-email
+        - name: PGADMIN_DEFAULT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pgadmin-secret
+              key: pgadmin-default-password
+        - name: PGADMIN_CONFIG_PROXY_X_FOR_COUNT
+          value: '1'
+        - name: PGADMIN_CONFIG_PROXY_X_PROTO_COUNT
+          value: '1'
+        - name: PGADMIN_CONFIG_PROXY_X_HOST_COUNT
+          value: '1'
+        - name: PGADMIN_CONFIG_PROXY_X_PORT_COUNT
+          value: '1'
+        - name: PGADMIN_CONFIG_PROXY_X_PREFIX_COUNT
+          value: '1'
+        - name: PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION
+          value: 'False'
+        - name: PGADMIN_SESSION_EXPIRATION_TIME
+          value: '1'
+        - name: PGADMIN_LISTEN_PORT
+          value: '8080'
+        - name: PGADMIN_SQLITE_TIMEOUT
+          value: "1000"
+        - name: PGADMIN_SERVER_HEARTBEAT_TIMEOUT
+          value: "60"
+        resources:
+          requests:
+            memory: "500Mi"
+            cpu: "1"
+          limits:
+            cpu: '2'
+            memory: 4Gi
+        securityContext:
+          capabilities:
+            add:
+            - NET_BIND_SERVICE
+            drop:
+            - ALL
+          runAsUser: 5050
+          runAsNonRoot: true
+          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /misc/ping
+            port: 8080
+          initialDelaySeconds: 45
+          periodSeconds: 20
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /misc/ping
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        volumeMounts:
+        - name: pgadmin-disk-data
+          mountPath: /var/lib/pgadmin
+      volumes:
+      - name: pgadmin-disk-data
+        persistentVolumeClaim:
+          claimName: pgadmin-pvc
