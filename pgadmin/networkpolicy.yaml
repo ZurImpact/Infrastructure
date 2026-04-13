@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: pgadmin-netpol
+  namespace: zi-staging
+spec:
+  podSelector:
+    matchLabels:
+      app: pgadmin
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - ports:
+    - port: 8080
+      protocol: TCP
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: postgres
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: postgres
+      namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: zi-prod
+    ports:
+    - protocol: TCP
+      port: 5432
+  - ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 443
+
