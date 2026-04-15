@@ -1,3 +1,18 @@
 postgres:
   storage:
     requestedSize: "5Gi"
+  networkPolicy:
+    ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            app: backend
+      - podSelector:
+          matchLabels:
+            app: pgadmin
+        namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: zi-prod
+      ports:
+      - protocol: TCP
+        port: 5432
