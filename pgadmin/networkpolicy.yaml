@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: pgadmin-netpol
-  namespace: zi-staging
+  namespace: zi-prod
 spec:
   podSelector:
     matchLabels:
@@ -24,7 +24,7 @@ spec:
           app.kubernetes.io/name: postgres
       namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: zi-prod
+          kubernetes.io/metadata.name: zi-staging
     ports:
     - protocol: TCP
       port: 5432

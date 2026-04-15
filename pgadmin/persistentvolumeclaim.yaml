@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pgadmin-pvc
-  namespace: zi-staging
+  namespace: zi-prod
 spec:
   accessModes:
   - ReadWriteOnce

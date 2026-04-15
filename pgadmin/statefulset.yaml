@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: pgadmin
-  namespace: zi-staging
+  namespace: zi-prod
 spec:
   serviceName: pgadmin-service
   podManagementPolicy: Parallel
