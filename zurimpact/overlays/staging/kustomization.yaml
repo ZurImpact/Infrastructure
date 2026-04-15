@@ -21,3 +21,11 @@ patches:
     - op: replace
       path: /spec/rules/0/host
       value: zurimpact-staging.pm4.init-lab.ch
+
+- target:
+    kind: Ingress
+    name: zurimpact-backend
+  patch: |-
+    - op: replace
+      path: /spec/rules/0/host
+      value: zi-backend-staging.pm4.init-lab.ch
