@@ -11,3 +11,7 @@ spec:
         env:
         - name: DB_URL
           value: jdbc:postgresql://postgres-zi-prod:5432/zurimpact
+        - name: SPRING_MAIL_HOST
+          value: "mailpit-prod-smtp"
+        - name: APP_BASE_URL
+          value: "https://zurimpact.pm4.init-lab.ch"
