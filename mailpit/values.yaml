@@ -29,15 +29,15 @@ mailpit:
         matchLabels:
           app.kubernetes.io/name: mailpit
       policyTypes:
-        - Ingress
+      - Ingress
       ingress:
-        - from:
-            - podSelector:
-                matchLabels:
-                  app: backend
-          ports:
-            - protocol: TCP
-              port: 1025
-        - ports:
-            - protocol: TCP
-              port: 8025 
+      - from:
+        - podSelector:
+            matchLabels:
+              app: backend
+        ports:
+        - protocol: TCP
+          port: 1025
+      - ports:
+          - protocol: TCP
+            port: 8025
