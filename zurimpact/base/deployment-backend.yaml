@@ -75,7 +75,7 @@ spec:
         - name: SPRING_MAIL_HOST
           value: "mailpit-smtp"
         - name: SPRING_MAIL_PORT
-          value: "1025"
+          value: "25"
         - name: SPRING_MAIL_PROTOCOL
           value: smtp
         - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH
