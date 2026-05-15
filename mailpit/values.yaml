@@ -39,5 +39,5 @@ mailpit:
         - protocol: TCP
           port: 1025
       - ports:
-          - protocol: TCP
-            port: 8025
+        - protocol: TCP
+          port: 8025
