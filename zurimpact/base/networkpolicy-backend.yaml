@@ -25,6 +25,13 @@ spec:
     ports:
     - protocol: TCP
       port: 5432
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: mailpit
+    ports:
+    - protocol: TCP
+      port: 1025
   - ports:
     - protocol: UDP
       port: 53

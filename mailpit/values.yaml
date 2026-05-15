@@ -1,0 +1,43 @@
+mailpit:
+  image:
+    pullPolicy: Always
+  revisionHistoryLimit: 1
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  extraEnvVars:
+  - name: MP_SMTP_AUTH_ACCEPT_ANY
+    value: "1"
+  - name: MP_SMTP_AUTH_ALLOW_INSECURE
+    value: "1"
+  ingress:
+    enabled: false
+  persistence:
+    enabled: true
+    storageClass: cinder-csi
+  extraDeploy:
+  - apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: mailpit-netpol
+    spec:
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: mailpit
+      policyTypes:
+        - Ingress
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  app: backend
+          ports:
+            - protocol: TCP
+              port: 1025
+        - ports:
+            - protocol: TCP
+              port: 8025 

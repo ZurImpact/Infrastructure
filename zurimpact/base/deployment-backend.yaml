@@ -72,6 +72,20 @@ spec:
             secretKeyRef:
               name: postgres-user-secret
               key: POSTGRES_PASSWORD
+        - name: SPRING_MAIL_HOST
+          value: "mailpit-smtp"
+        - name: SPRING_MAIL_PORT
+          value: "1025"
+        - name: SPRING_MAIL_PROTOCOL
+          value: smtp
+        - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH
+          value: "false"
+        - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
+          value: "false"
+        - name: APP_MAIL_FROM
+          value: no-reply@zurimpact.local
+        - name: APP_BASE_URL
+          value: "https://staging.zurimpact.com"
         ports:
         - containerPort: 8080
           name: backend

@@ -11,3 +11,5 @@ spec:
         env:
         - name: DB_URL
           value: jdbc:postgresql://postgres-zi-staging:5432/zurimpact
+        - name: APP_BASE_URL
+          value: "https://zurimpact-staging.pm4.init-lab.ch"
