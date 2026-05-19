@@ -11,3 +11,5 @@ spec:
         env:
         - name: DB_URL
           value: jdbc:postgresql://postgres-zi-prod:5432/zurimpact
+        - name: APP_CORS_ALLOWED_ORIGINS
+          value: "https://zurimpact.pm4.init-lab.ch"
