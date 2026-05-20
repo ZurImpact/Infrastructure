@@ -14,6 +14,11 @@ mailpit:
     value: "1"
   - name: MP_SMTP_AUTH_ALLOW_INSECURE
     value: "1"
+  - name: MP_UI_AUTH
+    valueFrom:
+      secretKeyRef:
+        name: mailpit-auth-secret
+        key: MP_UI_AUTH
   ingress:
     enabled: false
   persistence:
