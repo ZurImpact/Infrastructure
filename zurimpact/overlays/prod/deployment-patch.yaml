@@ -14,5 +14,6 @@ spec:
         - name: SPRING_MAIL_HOST
           value: "mailpit-prod-smtp"
         - name: APP_BASE_URL
+          value: "https://zurimpact.pm4.init-lab.ch"
         - name: APP_CORS_ALLOWED_ORIGINS
           value: "https://zurimpact.pm4.init-lab.ch"
