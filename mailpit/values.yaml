@@ -18,7 +18,7 @@ mailpit:
     valueFrom:
       secretKeyRef:
         name: mailpit-auth-secret
-        key: MP_UI_AUTH 
+        key: MP_UI_AUTH
   ingress:
     enabled: false
   persistence:
