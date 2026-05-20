@@ -1,0 +1,4 @@
+mailpit:
+  ingress:
+    enabled: true
+    hostname: zi-mailpit-staging.pm4.init-lab.ch
