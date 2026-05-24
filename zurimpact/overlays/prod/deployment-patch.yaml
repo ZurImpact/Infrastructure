@@ -29,7 +29,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: resend-secret
-              key: api-key             
+              key: api-key    
         - name: APP_BASE_URL
           value: "https://zurimpact.pm4.init-lab.ch"
         - name: APP_CORS_ALLOWED_ORIGINS
