@@ -7,9 +7,9 @@ resources:
 
 images:
 - name: ghcr.io/zurimpact/zurimpact-backend
-  newTag: dev-174df70
+  newTag: dev-fb53ead
 - name: ghcr.io/zurimpact/zurimpact-frontend
-  newTag: dev-174df70
+  newTag: dev-fb53ead
 
 patches:
 - path: deployment-patch.yaml
