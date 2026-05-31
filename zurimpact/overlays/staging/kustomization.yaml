@@ -4,6 +4,7 @@ namespace: zi-staging
 
 resources:
 - ../../base
+- networkpolicy-backend.yaml
 
 images:
 - name: ghcr.io/zurimpact/zurimpact-backend

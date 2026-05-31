@@ -12,7 +12,24 @@ spec:
         - name: DB_URL
           value: jdbc:postgresql://postgres-zi-prod:5432/zurimpact
         - name: SPRING_MAIL_HOST
-          value: "mailpit-prod-smtp"
+          value: "smtp.resend.com"
+        - name: SPRING_MAIL_PORT
+          value: "587"
+        - name: SPRING_MAIL_PROTOCOL
+          value: smtp
+        - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH
+          value: "true"
+        - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
+          value: "true"
+        - name: APP_MAIL_FROM
+          value: no-reply@hitzlinger.ch
+        - name: SPRING_MAIL_USERNAME
+          value: resend
+        - name: SPRING_MAIL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: resend-secret
+              key: api-key
         - name: APP_BASE_URL
           value: "https://zurimpact.pm4.init-lab.ch"
         - name: APP_CORS_ALLOWED_ORIGINS
